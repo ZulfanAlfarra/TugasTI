@@ -7,6 +7,7 @@ import numpy as np
 
 model = load_model('model_tl_inception.h5')
 classes = ['bagong', 'cepot', 'gareng', 'petruk', 'semar']
+video_id = ['kYJCOq74BKs', 'zDHlGU1mrD4', 'cx0QWIsi3GI', 'ukaaO2z3YNI', 'PjdPIxjeiTI']
 information = ['Wayang Bagong adalah salah satu karakter punakawan dalam seni pertunjukan tradisional Jawa, seperti wayang kulit. Bagong adalah tokoh yang lucu dan ceria, sering memberikan humor dalam cerita wayang kulit dan juga pesan moral. Karakternya memiliki wajah bulat dengan moncong panjang, dan ia merupakan tokoh yang sangat disukai dalam pertunjukan wayang kulit.',
                'Wayang Cepot adalah salah satu tokoh punakawan dalam seni pertunjukan tradisional Sunda, khususnya dalam pertunjukan wayang golek Sunda. Wayang golek adalah seni pertunjukan tradisional dari Jawa Barat, Indonesia, yang menggunakan boneka kayu untuk menggambarkan berbagai tokoh dalam cerita. Cepot adalah tokoh punakawan yang cerdas, ceria, dan sering kali menjadi sumber humor dalam cerita wayang golek Sunda. Ia dikenal dengan tingkah laku kocaknya dan sering memberikan nasihat atau petuah dalam bentuk humor kepada tokoh-tokoh lain dalam pertunjukan. Wayang Cepot adalah salah satu tokoh yang paling populer dalam wayang golek Sunda dan merupakan bagian penting dari seni dan budaya Sunda.',
                'Wayang Gareng adalah salah satu tokoh punakawan dalam seni pertunjukan wayang kulit Jawa yang cerdas, berwawasan, dan sering memberikan nasihat bijak dalam cerita. Dengan wajah bulat, moncong pendek, dan rambut yang kusut, Gareng tidak hanya memberikan humor, tetapi juga memiliki karakter serius yang mendalam, sering berperan sebagai penasihat raja atau tokoh utama. Ia memainkan peran penting dalam menjaga keseimbangan karakter punakawan dan memberikan pesan moral dalam pertunjukan wayang kulit, menjadikannya salah satu tokoh yang sangat dihormati dan disukai dalam budaya Jawa.',
@@ -21,7 +22,7 @@ def predict_label(img_path):
     output = model.predict(images)
     best_index = np.argmax(output)
 
-    return classes[best_index], information[best_index]
+    return classes[best_index], information[best_index], video_id[best_index]
 
 
 app = Flask(__name__, template_folder='views')
@@ -40,8 +41,9 @@ def get_output():
         img.save(img_path)
 
         p = predict_label(img_path)
+
     
-    return render_template("index.html", prediction=p, img_path= img_path)
+    return render_template("index.html", prediction=p, img_path= img_path, video_id=video_id)
 
 if __name__ == '__main__':
     app.run(debug=True)
